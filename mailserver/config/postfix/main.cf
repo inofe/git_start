@@ -1,0 +1,27 @@
+# Temel ayarlar
+myhostname = mail.example.com
+mydomain = example.com
+myorigin = $mydomain
+
+# TLS ayarları
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.example.com/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.example.com/privkey.pem
+smtpd_tls_security_level = may
+
+# SASL ayarları
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+
+# Spam koruması
+smtpd_recipient_restrictions =
+    permit_sasl_authenticated
+    permit_mynetworks
+    reject_unauth_destination
+    reject_rbl_client zen.spamhaus.org
+
+# DKIM ve DMARC
+milter_protocol = 2
+milter_default_action = accept
+smtpd_milters = inet:localhost:8891, inet:localhost:8893
+non_smtpd_milters = $smtpd_milters 
